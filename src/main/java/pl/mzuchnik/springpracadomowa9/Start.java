@@ -71,7 +71,7 @@ public class Start {
     @EventListener(ApplicationReadyEvent.class)
     @GetProcessingTime(name = "Odczyt JDBC")
     public void readDataJdbc() {
-        userJdbcService.getUsers();
+        List<UserJdbc> users = userJdbcService.getUsers();
     }
 
     @EventListener(ApplicationReadyEvent.class)

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import pl.mzuchnik.springpracadomowa9.Gender;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +43,7 @@ public class UserJdbcServiceImpl implements UserJdbcService{
             }
 
             pstmt.executeBatch();
-
+            c.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -52,16 +51,13 @@ public class UserJdbcServiceImpl implements UserJdbcService{
 
     @Override
     public List<UserJdbc> getUsers() {
-        List<UserJdbc> usersJdbc = new ArrayList<>();
-
         String sql = "SELECT id, firstName, lastName, email, gender, ipAddress FROM UserJdbc";
-        jdbcTemplate.query(sql, new RowMapper<UserJdbc>() {
+
+        return jdbcTemplate.query(sql, new RowMapper<UserJdbc>() {
             @Override
             public UserJdbc mapRow(ResultSet rs, int i) throws SQLException {
-                return new UserJdbc(rs.getLong(1),rs.getString(2),rs.getString(3),rs.getString(4), Gender.valueOf(rs.getString(5)),rs.getString(6));
+                return new UserJdbc(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), Gender.valueOf(rs.getString(5)), rs.getString(6));
             }
         });
-
-        return usersJdbc;
     }
 }
